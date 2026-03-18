@@ -1,15 +1,15 @@
-export const uploadFilesToImageKit = async (
-  files: FileList | File[],
-) => {
+export const uploadFilesToImageKit = async (files: FileList | File[]) => {
   const fileList = Array.from(files);
   const uploadedUrls = [];
 
   for (const file of fileList) {
     // Get authentication parameters from our server route
     const authRes = await fetch("/api/imagekit/auth");
-    
+
     if (!authRes.ok) {
-      throw new Error(`Failed to get ImageKit auth params: ${authRes.statusText}`);
+      throw new Error(
+        `Failed to get ImageKit auth params: ${authRes.statusText}`,
+      );
     }
     const { token, expire, signature } = await authRes.json();
 
@@ -23,10 +23,13 @@ export const uploadFilesToImageKit = async (
     formData.append("fileName", file.name);
 
     // Call ImageKit API
-    const uploadRes = await fetch("https://upload.imagekit.io/api/v1/files/upload", {
-      method: "POST",
-      body: formData,
-    });
+    const uploadRes = await fetch(
+      "https://upload.imagekit.io/api/v1/files/upload",
+      {
+        method: "POST",
+        body: formData,
+      },
+    );
 
     if (!uploadRes.ok) {
       throw new Error(`Failed to upload to ImageKit: ${uploadRes.statusText}`);
@@ -47,3 +50,5 @@ export const uploadFilesToImageKit = async (
 
   return uploadedUrls;
 };
+
+// getting called in multi-modal-chat

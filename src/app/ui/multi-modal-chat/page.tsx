@@ -7,14 +7,14 @@ import { uploadFilesToImageKit } from "@/utils/imagekitUpload";
 
 const MultiModalChat = () => {
   const [input, setInput] = useState("");
-  const [files, setFiles] = useState<FileList | undefined>(undefined)
+  const [files, setFiles] = useState<FileList | undefined>(undefined);
 
-  const fileInputRef = useRef<HTMLInputElement>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { messages, sendMessage, status, error, stop } = useChat({
     transport: new DefaultChatTransport({
-      api: "/api/multi-modal-chat"
-    })
+      api: "/api/multi-modal-chat",
+    }),
   });
 
   const [isUploading, setIsUploading] = useState(false);
@@ -46,7 +46,7 @@ const MultiModalChat = () => {
     setInput("");
     setFiles(undefined);
 
-    if (fileInputRef.current){
+    if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
   };
@@ -71,14 +71,16 @@ const MultiModalChat = () => {
                         <div key={`${message.id}-${index}`}>{part.text}</div>
                       );
                     case "file":
-                      if (part.mediaType?.startsWith("/image")){
-                        return <Image key={`${message.id}-${index}`}
-                        src={part.url}
-                        alt={part.filename ?? `attachment-${index}`}
-                        width={500}
-                        height={500}
-                        />
-
+                      if (part.mediaType?.startsWith("image/")) {
+                        return (
+                          <Image
+                            key={`${message.id}-${index}`}
+                            src={part.url}
+                            alt={part.filename ?? `attachment-${index}`}
+                            width={500}
+                            height={500}
+                          />
+                        );
                       }
                     default:
                       return null;
@@ -136,14 +138,39 @@ const MultiModalChat = () => {
             {files && files.length > 0 && (
               <div className="flex gap-2 mx-1 overflow-x-auto pb-1">
                 {Array.from(files).map((file, i) => (
-                  <div key={i} className="flex items-center gap-2 bg-neutral-800 border border-neutral-700 px-3 py-1.5 rounded-lg text-xs text-neutral-300 shrink-0">
-                    <svg className="w-4 h-4 text-neutral-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <div
+                    key={i}
+                    className="flex items-center gap-2 bg-neutral-800 border border-neutral-700 px-3 py-1.5 rounded-lg text-xs text-neutral-300 shrink-0"
+                  >
+                    <svg
+                      className="w-4 h-4 text-neutral-500"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
                       <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
                       <polyline points="14 2 14 8 20 8" />
                     </svg>
                     <span className="truncate max-w-[120px]">{file.name}</span>
-                    <button type="button" className="text-neutral-500 hover:text-red-400 ml-1">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <button
+                      type="button"
+                      className="text-neutral-500 hover:text-red-400 ml-1"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
                         <line x1="18" y1="6" x2="6" y2="18"></line>
                         <line x1="6" y1="6" x2="18" y2="18"></line>
                       </svg>
@@ -153,7 +180,10 @@ const MultiModalChat = () => {
               </div>
             )}
 
-            <form onSubmit={handleSubmit} className="flex gap-2 w-full items-end">
+            <form
+              onSubmit={handleSubmit}
+              className="flex gap-2 w-full items-end"
+            >
               {/* Attachment Button & Hidden Input */}
               <input
                 type="file"
@@ -170,7 +200,17 @@ const MultiModalChat = () => {
                 className="bg-neutral-800 hover:bg-neutral-700 text-neutral-400 hover:text-neutral-200 px-4 py-3 rounded-2xl transition-all border border-neutral-700 h-[50px] flex items-center justify-center shrink-0"
                 title="Attach files"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
                   <path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48" />
                 </svg>
               </button>
@@ -199,7 +239,11 @@ const MultiModalChat = () => {
                 <button
                   type="submit"
                   className="bg-blue-600 hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed text-white px-6 py-3 rounded-2xl font-medium transition-all shadow-lg shadow-blue-600/20 active:scale-[0.98] h-[50px] flex items-center justify-center whitespace-nowrap"
-                  disabled={status !== "ready" || isUploading || (!input.trim() && (!files || files.length === 0))}
+                  disabled={
+                    status !== "ready" ||
+                    isUploading ||
+                    (!input.trim() && (!files || files.length === 0))
+                  }
                 >
                   {isUploading ? "Uploading..." : "Send"}
                 </button>
