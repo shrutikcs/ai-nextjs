@@ -10,13 +10,13 @@ export async function POST(req: Request) {
       prompt,
     });
 
-    result.usage.then((usage)=>{
+    result.usage.then((usage) => {
       console.log({
         inputTokens: usage.inputTokenDetails,
         outputTokens: usage.outputTokenDetails,
-        totalTokens: usage.totalTokens
-      })
-    })
+        totalTokens: usage.totalTokens,
+      });
+    });
 
     return result.toUIMessageStreamResponse();
   } catch (error) {
