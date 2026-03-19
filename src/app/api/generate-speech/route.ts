@@ -11,7 +11,7 @@ export async function POST(req: Request) {
     // Generate speech using the Groq SDK
     const result = await groq.audio.speech.create({
       model: "canopylabs/orpheus-v1-english",
-      voice: "hannah",
+      voice: "autumn",
       input: text,
       response_format: "wav",
     });
