@@ -8,14 +8,14 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Field } from "@/components/ui/field";
 import { IconAlertCircle } from "@tabler/icons-react";
 import { DefaultChatTransport } from "ai";
-import type { ChatMessage } from "@/app/api/tools/route";
+import type { ChatMessage } from "@/app/api/multi-tool/route";
 
 const Chat = () => {
   const [input, setInput] = useState("");
 
   const { messages, sendMessage, status, error, stop } = useChat<ChatMessage>({
     transport: new DefaultChatTransport({
-      api: "/api/tools",
+      api: "/api/multi-tool",
     }),
   });
 
@@ -50,13 +50,73 @@ const Chat = () => {
                       return (
                         <div key={`${message.id}-${index}`}>{part.text}</div>
                       );
+                    case "tool-getLocation":
+                      switch (part.state) {
+                        case "input-streaming":
+                          return (
+                            <div
+                              key={`${message.id}-getLocation-${index}`}
+                              className="my-1 rounded-lg border border-border bg-muted/40 px-3 py-2"
+                            >
+                              <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground mb-1.5">
+                                Receiving Location…
+                              </p>
+                              <pre className="text-xs text-muted-foreground whitespace-pre-wrap font-mono">
+                                {JSON.stringify(part.input, null, 2)}
+                              </pre>
+                            </div>
+                          )
+                        case "input-available":
+                          return (
+                            <div
+                              key={`${message.id}-getLocation-${index}`}
+                              className="my-1 rounded-lg border border-border bg-muted/40 px-3 py-2"
+                            >
+                              <div className="text-xs text-muted-foreground whitespace-pre-wrap font-mono">
+                                Getting location for {part.input?.name}
+                              </div>
+                            </div>
+                          )
+                        case "output-available":
+                          return (
+                            <div
+                              key={`${message.id}-getLocation-${index}`}
+                              className="my-1 rounded-lg border border-border bg-muted/40 px-3 py-2"
+                              >
+                              <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground mb-1.5">
+                                Location found
+                              </p>
+                              <div className="text-xs text-muted-foreground whitespace-pre-wrap font-mono">
+                              {part.output}
+                              </div>
+                            </div>
+                          )
+                          case "output-error":
+                          return (
+                            <div
+                              key={`${message.id}-getLocation-${index}`}
+                              className="my-1 rounded-lg border border-destructive/30 bg-destructive/10 px-3 py-2"
+                            >
+                              <p className="text-[10px] font-semibold uppercase tracking-widest text-destructive mb-1">
+                                Error
+                              </p>
+                              <p className="text-xs text-destructive">
+                                {part.errorText}
+                              </p>
+                            </div>
+                          );
+
+                        default:
+                          return null
+                      }
+                    
                     case "tool-getWeather":
                       switch (part.state) {
                         case "input-streaming":
                           return (
                             <div
-                              key={`${message.id}-getWeather-${index}`}
-                              className="my-1 rounded-lg border border-border bg-muted/40 px-3 py-2"
+                            key={`${message.id}-getWeather-${index}`}
+                            className="my-1 rounded-lg border border-border bg-muted/40 px-3 py-2"
                             >
                               <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground mb-1.5">
                                 Fetching weather…
@@ -94,7 +154,7 @@ const Chat = () => {
                               </p>
                             </div>
                           );
-                        case "output-error":
+                          case "output-error":
                           return (
                             <div
                               key={`${message.id}-getWeather-${index}`}
