@@ -134,9 +134,9 @@ const GenerateSpeech = () => {
             </Alert>
           )}
 
-          {hasAudio &&
-            !isLoading &&
-            (<Button onClick={replayAudio}>Replay</Button>)}
+          {hasAudio && !isLoading && (
+            <Button onClick={replayAudio}>Replay</Button>
+          )}
         </div>
       </div>
 
@@ -145,10 +145,7 @@ const GenerateSpeech = () => {
         <div className="max-w-2xl mx-auto">
           <form onSubmit={handleSubmit} className="flex gap-2 w-full items-end">
             {/* Input — goes red when over character limit */}
-            <Field
-              data-invalid={isOverLimit || undefined}
-              className="flex-1"
-            >
+            <Field data-invalid={isOverLimit || undefined} className="flex-1">
               <Input
                 id="text-input"
                 placeholder="What should I say?"

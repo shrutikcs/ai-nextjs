@@ -165,7 +165,8 @@ npx shadcn@latest docs button dialog select
 
 ## Workflow
 
-1. **Get project context** — already injected above. Run `npx shadcn@latest info` again if you need to refresh.
+0. **Check for `components.json` before any init/install** — Before running any `bunx shadcn@latest init` or installation command, check whether `components.json` already exists in the project root. If it exists, shadcn is already set up — **skip init entirely** and proceed directly to adding components. Only run `init` when `components.json` is absent.
+1. **Get project context** — already injected above. Run `bunx shadcn@latest info` again if you need to refresh.
 2. **Check installed components first** — before running `add`, always check the `components` list from project context or list the `resolvedPaths.ui` directory. Don't import components that haven't been added, and don't re-add ones already installed.
 3. **Find components** — `npx shadcn@latest search`.
 4. **Get docs and examples** — run `npx shadcn@latest docs <component>` to get URLs, then fetch them. Use `npx shadcn@latest view` to browse registry items you haven't installed. To preview changes to installed components, use `npx shadcn@latest add --diff`.
